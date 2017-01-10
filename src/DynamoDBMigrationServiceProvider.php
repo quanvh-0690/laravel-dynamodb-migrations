@@ -1,5 +1,4 @@
 <?php
-
 namespace QuanKim\LaravelDynamoDBMigrations;
 
 use Illuminate\Support\ServiceProvider;

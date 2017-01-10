@@ -90,9 +90,9 @@ class BaseCommand extends Command
                 ],
             ],
             'ProvisionedThroughput' => [
-                'ReadCapacityUnits'  => 10,
+                'ReadCapacityUnits' => 10,
                 'WriteCapacityUnits' => 10,
-            ]
+            ],
         ]);
         $this->dbClient->waitUntil('TableExists', [
             'TableName' => 'migrations',

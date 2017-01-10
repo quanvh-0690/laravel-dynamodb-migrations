@@ -1,7 +1,5 @@
 <?php
-
 namespace QuanKim\LaravelDynamoDBMigrations;
-
 
 use Aws\DynamoDb\DynamoDbClient;
 
