@@ -1,0 +1,13 @@
+{
+    "name": "quankim/laravel-dynamodb-migrations",
+    "description": "Create Migrations (version control) for DynamoDB",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Vo Hong Quan",
+            "email": "vo.hong.quan@framgia.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

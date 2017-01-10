@@ -1,0 +1,30 @@
+<?php
+namespace Database\Migration\DynamoDB;
+
+use App\Console\Commands\DynamoDB\DBClient;
+
+class DummyClass extends DBClient
+{
+    public function up()
+    {
+        $this->dbClient->updateTable([
+            'TableName' => 'DummyTable',
+            // Code for update
+        ]);
+        $this->dbClient->waitUntil('TableExists', [
+            'TableName' => 'DummyTable',
+            '@waiter' => [
+                'delay' => 5,
+                'maxAttempts' => 20,
+            ],
+        ]);
+    }
+
+    /**
+     * if cannot rollback set $canRollback = false
+     */
+    public function down(&$canRollback)
+    {
+        // Code for reverse update
+    }
+}

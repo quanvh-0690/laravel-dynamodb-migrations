@@ -1,0 +1,54 @@
+<?php
+namespace Database\Migration\DynamoDB;
+
+use App\Console\Commands\DynamoDB\DBClient;
+
+class DummyClass extends DBClient
+{
+    public function up()
+    {
+        $this->dbClient->createTable([
+            'TableName' => 'DummyTable',
+            'AttributeDefinitions' => [
+                [
+                    'AttributeName' => '<string>',
+                    'AttributeType' => 'S|N|B',
+                ],
+            ],
+            'KeySchema' => [
+                [
+                    'AttributeName' => '<string>',
+                    'KeyType'       => 'HASH|RANGE',
+                ],
+            ],
+            'ProvisionedThroughput' => [
+                'ReadCapacityUnits'  => 1,
+                'WriteCapacityUnits' => 1,
+            ]
+        ]);
+        $this->dbClient->waitUntil('TableExists', [
+            'TableName' => 'DummyTable',
+            '@waiter' => [
+                'delay' => 5,
+                'maxAttempts' => 20,
+            ],
+        ]);
+    }
+
+    /**
+     * if cannot rollback set $canRollback = false
+     */
+    public function down(&$canRollback)
+    {
+        $this->dbClient->deleteTable([
+            'TableName' => 'DummyTable',
+        ]);
+        $this->dbClient->waitUntil('TableNotExists', [
+            'TableName' => 'DummyTable',
+            '@waiter' => [
+                'delay' => 5,
+                'maxAttempts' => 20,
+            ],
+        ]);
+    }
+}

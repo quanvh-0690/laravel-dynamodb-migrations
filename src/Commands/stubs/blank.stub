@@ -1,0 +1,20 @@
+<?php
+namespace Database\Migration\DynamoDB;
+
+use App\Console\Commands\DynamoDB\DBClient;
+
+class DummyClass extends DBClient
+{
+    public function up()
+    {
+        // Code for migrate
+    }
+
+    /**
+     * if cannot rollback set $canRollback = false
+     */
+    public function down(&$canRollback)
+    {
+        // Code for rollback
+    }
+}
