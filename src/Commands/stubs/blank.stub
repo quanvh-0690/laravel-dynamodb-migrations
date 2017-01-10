@@ -1,7 +1,7 @@
 <?php
 namespace Database\Migration\DynamoDB;
 
-use App\Console\Commands\DynamoDB\DBClient;
+use QuanKim\LaravelDynamoDBMigrations\DBClient;
 
 class DummyClass extends DBClient
 {
