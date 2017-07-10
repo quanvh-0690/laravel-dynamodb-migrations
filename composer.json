@@ -8,6 +8,13 @@
             "email": "vo.hong.quan@framgia.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "QuanKim\\LaravelDynamoDBMigrations\\": "src/"
+        }
+    },
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "aws/aws-sdk-php-laravel": "~3.0"
+    }
 }

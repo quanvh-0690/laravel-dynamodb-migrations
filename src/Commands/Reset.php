@@ -4,7 +4,7 @@ namespace QuanKim\LaravelDynamoDBMigrations\Commands;
 use Illuminate\Console\ConfirmableTrait;
 use Symfony\Component\Console\Input\InputOption;
 
-class Rollback extends BaseCommand
+class Reset extends BaseCommand
 {
     use ConfirmableTrait;
 
@@ -13,14 +13,14 @@ class Rollback extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'dynamodb:rollback';
+    protected $name = 'dynamodb:reset';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Rollback migration for DynamoDB';
+    protected $description = 'Rollback all migration for DynamoDB';
 
     /**
      * Create a new command instance.
@@ -44,11 +44,11 @@ class Rollback extends BaseCommand
         }
 
         $migrationsData = $this->getMigrationsData();
-        $batch = $this->getLastBatchNumber($migrationsData);
-        $migrationsRunFile = array_where($migrationsData, function ($value) use ($batch) {
-            return $value['batch'] == $batch;
+        $migrationsSorted = collect($migrationsData)->sortByDesc(function ($migration) {
+            return sprintf('%-12s%s', $migration['batch'], $migration['name']);
         });
-        foreach ($migrationsRunFile as $item) {
+
+        foreach ($migrationsSorted as $item) {
             $this->runRollback($item['name'], $item['batch']);
         }
     }

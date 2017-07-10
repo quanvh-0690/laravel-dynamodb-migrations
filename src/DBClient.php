@@ -14,11 +14,18 @@ class DBClient
     
     public static function factory()
     {
-        return DynamoDbClient::factory([
-            'endpoint' => config('aws.endpoint'),
+        $config = [
             'region' => config('aws.region'),
             'version' => config('aws.version'),
             'credentials' => config('aws.credentials'),
-        ]);
+            'http' => [
+                'verify' => config('aws.http.verify'),
+            ]
+        ];
+        if (config('aws.endpoint')) {
+            $config['endpoint'] = config('aws.endpoint');
+        }
+    
+        return DynamoDbClient::factory($config);
     }
 }

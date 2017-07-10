@@ -8,7 +8,7 @@ class DummyClass extends DBClient
     public function up()
     {
         $this->dbClient->createTable([
-            'TableName' => 'DummyTable',
+            'TableName' => config('aws.prefix') . 'DummyTable',
             'AttributeDefinitions' => [
                 [
                     'AttributeName' => '<string>',
@@ -27,7 +27,7 @@ class DummyClass extends DBClient
             ]
         ]);
         $this->dbClient->waitUntil('TableExists', [
-            'TableName' => 'DummyTable',
+            'TableName' => config('aws.prefix') . 'DummyTable',
             '@waiter' => [
                 'delay' => 5,
                 'maxAttempts' => 20,
@@ -41,10 +41,10 @@ class DummyClass extends DBClient
     public function down(&$canRollback)
     {
         $this->dbClient->deleteTable([
-            'TableName' => 'DummyTable',
+            'TableName' => config('aws.prefix') . 'DummyTable',
         ]);
         $this->dbClient->waitUntil('TableNotExists', [
-            'TableName' => 'DummyTable',
+            'TableName' => config('aws.prefix') . 'DummyTable',
             '@waiter' => [
                 'delay' => 5,
                 'maxAttempts' => 20,
