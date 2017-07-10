@@ -2,15 +2,18 @@
 namespace QuanKim\LaravelDynamoDBMigrations\Commands;
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Console\ConfirmableTrait;
 
 class Migrate extends BaseCommand
 {
+    use ConfirmableTrait;
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'dynamodb:migrate';
+    protected $signature = 'dynamodb:migrate {--force : Force the operation to run when in production.}';
 
     /**
      * The console command description.
@@ -39,6 +42,10 @@ class Migrate extends BaseCommand
      */
     public function handle()
     {
+        if (! $this->confirmToProceed()) {
+            return;
+        }
+
         $migrationsPath = database_path() . '/migrations/dynamodb';
         $allMigrationsFile = $this->getAllMigrationsFile($migrationsPath);
         $migrationsData = $this->getMigrationsData();

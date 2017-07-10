@@ -1,0 +1,17 @@
+<?php
+namespace App\Models;
+
+use QuanKim\DynamoDb\DynamoDbClientService;
+
+class DummyClass extends BaseModel
+{
+    public $fillable = [
+        
+    ];
+    
+    public function __construct(array $attributes = [], DynamoDbClientService $dynamoDb = null)
+    {
+        parent::__construct($attributes, $dynamoDb);
+        $this->table = config('aws.prefix') . 'DummyTable';
+    }
+}

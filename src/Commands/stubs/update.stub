@@ -8,11 +8,11 @@ class DummyClass extends DBClient
     public function up()
     {
         $this->dbClient->updateTable([
-            'TableName' => 'DummyTable',
+            'TableName' => config('aws.prefix') . 'DummyTable',
             // Code for update
         ]);
         $this->dbClient->waitUntil('TableExists', [
-            'TableName' => 'DummyTable',
+            'TableName' => config('aws.prefix') . 'DummyTable',
             '@waiter' => [
                 'delay' => 5,
                 'maxAttempts' => 20,
