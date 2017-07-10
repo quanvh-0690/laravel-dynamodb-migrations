@@ -45,9 +45,9 @@ class BaseCommand extends Command
     
     protected function getMigrationsData()
     {
-        if ($this->isTableExists('migrations')) {
+        if ($this->isTableExists(config('aws.prefix') . 'migrations')) {
             $results = $this->dbClient->scan([
-                'TableName' => 'migrations',
+                'TableName' => config('aws.prefix') . 'migrations',
             ]);
             $data = [];
             foreach ($results['Items'] as $row) {
@@ -68,7 +68,7 @@ class BaseCommand extends Command
     protected function createMigrationsTable()
     {
         $this->dbClient->createTable([
-            'TableName' => 'migrations',
+            'TableName' => config('aws.prefix') . 'migrations',
             'AttributeDefinitions' => [
                 [
                     'AttributeName' => 'name',
@@ -90,12 +90,12 @@ class BaseCommand extends Command
                 ],
             ],
             'ProvisionedThroughput' => [
-                'ReadCapacityUnits' => 10,
-                'WriteCapacityUnits' => 10,
+                'ReadCapacityUnits' => 1,
+                'WriteCapacityUnits' => 1,
             ],
         ]);
         $this->dbClient->waitUntil('TableExists', [
-            'TableName' => 'migrations',
+            'TableName' => config('aws.prefix') . 'migrations',
             '@waiter' => [
                 'delay' => 5,
                 'maxAttempts' => 20,
@@ -117,10 +117,10 @@ class BaseCommand extends Command
     protected function writeMigrationLog($file, $batch)
     {
         $this->dbClient->putItem([
-            'TableName' => 'migrations',
+            'TableName' => config('aws.prefix') . 'migrations',
             'Item' => [
                 'name' => ['S' => $file],
-                'batch' => ['N' => $batch],
+                'batch' => ['N' => (string)$batch],
             ],
         ]);
     }
@@ -146,10 +146,10 @@ class BaseCommand extends Command
     protected function deleteMigrationLog($file, $batch)
     {
         $this->dbClient->deleteItem([
-            'TableName' => 'migrations',
+            'TableName' => config('aws.prefix') . 'migrations',
             'Key' => [
                 'batch' => [
-                    'N' => $batch,
+                    'N' => (string)$batch,
                 ],
                 'name' => [
                     'S' => $file,
