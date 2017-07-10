@@ -1,10 +1,12 @@
 <?php
+
 namespace QuanKim\LaravelDynamoDBMigrations\Commands;
 
+use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
 use Symfony\Component\Console\Input\InputOption;
 
-class Rollback extends BaseCommand
+class Seed extends Command
 {
     use ConfirmableTrait;
 
@@ -13,14 +15,14 @@ class Rollback extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'dynamodb:rollback';
+    protected $name = 'dynamodb:seed';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Rollback migration for DynamoDB';
+    protected $description = 'Seeder for DynamoDB';
 
     /**
      * Create a new command instance.
@@ -43,14 +45,14 @@ class Rollback extends BaseCommand
             return;
         }
 
-        $migrationsData = $this->getMigrationsData();
-        $batch = $this->getLastBatchNumber($migrationsData);
-        $migrationsRunFile = array_where($migrationsData, function ($value) use ($batch) {
-            return $value['batch'] == $batch;
-        });
-        foreach ($migrationsRunFile as $item) {
-            $this->runRollback($item['name'], $item['batch']);
-        }
+        $this->getSeeder()->run();
+    }
+    
+    private function getSeeder()
+    {
+        $class = $this->laravel->make('Database\\Seeds\\DynamoDB\\' . $this->input->getOption('class'));
+
+        return $class->setContainer($this->laravel)->setCommand($this);
     }
 
     /**
@@ -61,6 +63,8 @@ class Rollback extends BaseCommand
     protected function getOptions()
     {
         return [
+            ['class', null, InputOption::VALUE_OPTIONAL, 'The class name of the root seeder', 'DynamoDBSeeder'],
+
             ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production.'],
         ];
     }
